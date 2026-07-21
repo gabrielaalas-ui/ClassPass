@@ -27,9 +27,22 @@ function startScanner() {
         if (devices && devices.length) {
 
 
+            let frontCamera = devices.find(camera =>
+
+                camera.label.toLowerCase().includes("front")
+
+            );
+
+
+            let cameraToUse = frontCamera
+                ? frontCamera.id
+                : devices[0].id;
+
+
+
             scanner.start(
 
-                devices[devices.length - 1].id,
+                cameraToUse,
 
                 {
                     fps: 10,
@@ -44,7 +57,8 @@ function startScanner() {
 
 
                     document.getElementById("message").innerHTML =
-                        "QR Code Found: " + decodedText;
+
+                    "QR Code Found: " + decodedText;
 
 
                 },
@@ -52,7 +66,7 @@ function startScanner() {
 
                 function(errorMessage) {
 
-                    // scanning continues
+                    // Scanner continues searching
 
                 }
 
