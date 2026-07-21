@@ -76,9 +76,15 @@ function startScanner() {
                     scanner.stop();
 
 
-                    document.getElementById("message").innerHTML =
+                   let studentName = students[decodedText] || "Unknown Student";
 
-                    "QR Code Found: " + decodedText;
+
+document.getElementById("message").innerHTML =
+
+"✓ Pass Recorded<br><br>" +
+studentName +
+"<br><br>" +
+selectedDestination;;
 
 
                 },
