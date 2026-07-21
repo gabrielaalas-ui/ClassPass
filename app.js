@@ -20,40 +20,74 @@ function startScanner() {
     scanner = new Html5Qrcode("reader");
 
 
-    scanner.start(
+    Html5Qrcode.getCameras()
 
-        {
-            facingMode: "user"
-        },
-
-        {
-            fps: 10,
-            qrbox: 250
-        },
+    .then(devices => {
 
 
-        function(decodedText) {
+        if (devices && devices.length) {
 
 
-            scanner.stop();
+            let cameraId = devices[0].id;
 
 
-            document.getElementById("message").innerHTML =
+            // Try to find the front camera
+            for (let i = 0; i < devices.length; i++) {
 
-                "QR Code Found: " + decodedText;
+                let label = devices[i].label.toLowerCase();
+
+                if (
+                    label.includes("front") ||
+                    label.includes("user") ||
+                    label.includes("facetime")
+                ) {
+
+                    cameraId = devices[i].id;
+
+                }
+
+            }
 
 
-        },
+
+            scanner.start(
+
+                cameraId,
+
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
 
 
-        function(errorMessage) {
+                function(decodedText) {
 
-            // Scanner continues searching
+
+                    scanner.stop();
+
+
+                    document.getElementById("message").innerHTML =
+
+                    "QR Code Found: " + decodedText;
+
+
+                },
+
+
+                function(errorMessage) {
+
+                    // Continue scanning
+
+                }
+
+
+            );
+
 
         }
 
 
-    )
+    })
 
 
     .catch(error => {
@@ -61,7 +95,7 @@ function startScanner() {
 
         document.getElementById("message").innerHTML =
 
-            "Camera error: " + error;
+        "Camera error: " + error;
 
 
     });
