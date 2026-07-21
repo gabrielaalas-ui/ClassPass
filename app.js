@@ -1,67 +1,80 @@
 let selectedDestination = "";
+let scanner;
 
 
 function selectDestination(destination) {
 
-
     selectedDestination = destination;
 
-
     document.getElementById("message").innerHTML =
-
-    "Ready to scan for: " + destination;
-
+        "Preparing camera...";
 
     startScanner();
-
 
 }
 
 
 
-function startScanner(){
+function startScanner() {
+
+    scanner = new Html5Qrcode("reader");
 
 
-    let scanner = new Html5Qrcode("reader");
+    Html5Qrcode.getCameras()
+    .then(devices => {
 
 
-
-    scanner.start(
-
-        {
-            facingMode: "environment"
-        },
+        if (devices && devices.length) {
 
 
-        {
-            fps: 10,
-            qrbox: 250
-        },
+            scanner.start(
+
+                devices[devices.length - 1].id,
+
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
 
 
-        function(decodedText){
+                function(decodedText) {
 
 
-            scanner.stop();
+                    scanner.stop();
 
 
-
-            document.getElementById("message").innerHTML =
-
-            "QR Code Found: " + decodedText;
+                    document.getElementById("message").innerHTML =
+                        "QR Code Found: " + decodedText;
 
 
+                },
 
-        },
+
+                function(errorMessage) {
+
+                    // scanning continues
+
+                }
 
 
-        function(errorMessage){
+            );
 
-            // Ignore scanning errors while searching
 
         }
 
-    );
+
+    })
+
+
+    .catch(error => {
+
+
+        document.getElementById("message").innerHTML =
+
+        "Camera error: " + error;
+
+
+    });
 
 
 }
