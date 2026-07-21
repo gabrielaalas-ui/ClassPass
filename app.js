@@ -2,6 +2,16 @@ let selectedDestination = "";
 let scanner;
 
 
+// Student list
+const students = {
+
+    "1001": "John Smith",
+
+    "1002": "Jane Doe"
+
+};
+
+
 function selectDestination(destination) {
 
     selectedDestination = destination;
